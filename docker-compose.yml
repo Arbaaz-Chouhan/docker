@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+  master:
+    build: .
+    container_name: master
+    hostname: master
+    privileged: true
+    ports:
+      - "2225:22"
+    volumes:
+      - master-docker:/var/lib/docker
+    networks:
+      swarm-net:
+        ipv4_address: 172.32.0.2
+
+  worker1:
+    build: .
+    container_name: worker1
+    hostname: worker1
+    privileged: true
+    ports:
+      - "2226:22"
+    volumes:
+      - worker1-docker:/var/lib/docker
+    networks:
+      swarm-net:
+        ipv4_address: 172.32.0.3
+
+  worker2:
+    build: .
+    container_name: worker2
+    hostname: worker2
+    privileged: true
+    ports:
+      - "2227:22"
+    volumes:
+      - worker2-docker:/var/lib/docker
+    networks:
+      swarm-net:
+        ipv4_address: 172.32.0.4
+
+networks:
+  swarm-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.32.0.0/16
+
+volumes:
+  master-docker:
+  worker1-docker:
+  worker2-docker:
